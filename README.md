@@ -79,7 +79,8 @@ curl -N http://127.0.0.1:8000/v1/chat/completions \
   -d '{"model":"qwen3.8:27b-mlx","messages":[{"role":"user","content":"你好"}],"max_tokens":128,"reasoning_effort":"none","stream":true}'
 ```
 
-Python 範例：`python examples/client.py`。聊天歷史由呼叫端在每次 `messages` 一併傳入。
+Python 範例：`python examples/client.py`。未指定 session 時，聊天歷史由呼叫端在每次 `messages` 一併傳入。
+需要伺服器保存使用者訊息、模型輸出並在最後產生完整對話摘要，請看 [對話記憶與摘要](MEMORY.md)。
 
 | 端點 | 功能 | 驗證 |
 |---|---|---|
@@ -90,7 +91,7 @@ Python 範例：`python examples/client.py`。聊天歷史由呼叫端在每次 
 | `GET /docs` | Swagger 文件 | 頁面無；API 呼叫需 Key |
 
 此版提供文字聊天子集，接受 `model`、`messages`、`max_tokens`、`temperature`、`top_p`、
-`stop`、`seed`、`reasoning_effort`、`stream` 與 `stream_options.include_usage`。
+`stop`、`seed`、`reasoning_effort`、`stream` 與 `stream_options.include_usage`，以及對話模式的 `session_id` / `user_id`。
 未知欄位回傳 422；圖片、工具呼叫、embeddings 與 Ollama 原生 `/api/chat` 不在本版範圍內。
 
 ## 設定與外部連線

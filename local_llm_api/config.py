@@ -1,4 +1,5 @@
 from urllib.parse import urlsplit
+from pathlib import Path
 
 from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -17,6 +18,10 @@ class Settings(BaseSettings):
     max_body_bytes: int = Field(default=1048576, ge=1)
     request_timeout: float = Field(default=300, gt=0)
     max_inflight: int = Field(default=2, ge=1)
+    memory_db_path: Path = Path("data/conversations.sqlite3")
+    memory_context_turns: int = Field(default=20, ge=1, le=1000)
+    summary_chunk_chars: int = Field(default=12000, ge=256)
+    summary_max_calls: int = Field(default=64, ge=1, le=1000)
 
     @model_validator(mode="after")
     def check_settings(self):
