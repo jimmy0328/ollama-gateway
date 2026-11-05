@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ollama-rest-api"
+version = "0.2.0"
+description = "Authenticated REST gateway for an Ollama server"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115,<1", "uvicorn>=0.34,<1", "httpx>=0.28,<1",
+  "pydantic-settings>=2.7,<3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "httpx2>=2.16,<3"]
+
+[project.scripts]
+ollama-rest-api = "local_llm_api.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["local_llm_api*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

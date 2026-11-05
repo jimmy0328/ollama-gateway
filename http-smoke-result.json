@@ -1,0 +1,56 @@
+{
+  "backend": "Ollama",
+  "ollama_base_url": "http://192.168.0.105:11434",
+  "models": {
+    "object": "list",
+    "data": [
+      {
+        "id": "qwen2.5-coder:32b",
+        "object": "model",
+        "created": 1793852215,
+        "owned_by": "library"
+      },
+      {
+        "id": "qwen3.8:27b-mlx",
+        "object": "model",
+        "created": 1793848469,
+        "owned_by": "library"
+      },
+      {
+        "id": "eriktonon/deepseek-v4.1-flash-1017:latest",
+        "object": "model",
+        "created": 1793084554,
+        "owned_by": "eriktonon"
+      }
+    ]
+  },
+  "unauthorized_status": 401,
+  "completion": {
+    "id": "chatcmpl-472",
+    "object": "chat.completion",
+    "created": 1793867238,
+    "model": "qwen3.8:27b-mlx",
+    "system_fingerprint": "fp_ollama",
+    "choices": [
+      {
+        "index": 0,
+        "message": {
+          "role": "assistant",
+          "content": "你好"
+        },
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 20,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "completion_tokens": 1,
+      "total_tokens": 21
+    }
+  },
+  "streamed_text": "你好",
+  "sse_done": true,
+  "stream_events": 2
+}
