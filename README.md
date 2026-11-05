@@ -97,7 +97,7 @@ Python 範例：`python examples/client.py`。聊天歷史由呼叫端在每次 
 
 | 設定 | 預設 | 說明 |
 |---|---|---|
-| `OLLAMA_BASE_URL` | `http://192.168.0.105:11434` | Ollama HTTP(S) 來源地址，不含 `/v1` |
+| `OLLAMA_BASE_URL` | 必填 | 在 `.env` 設定 Ollama HTTP(S) 來源地址，不含 `/v1` |
 | `MODEL_ID` | `qwen3.8:27b-mlx` | 請求省略模型時的預設值 |
 | `API_KEY` | 必填 | 本 API 的 Bearer Key，至少 16 字元 |
 | `HOST` / `PORT` | `127.0.0.1` / `8000` | 本 API 綁定位置 |

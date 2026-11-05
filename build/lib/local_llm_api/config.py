@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    ollama_base_url: str = "http://192.168.0.105:11434"
+    ollama_base_url: str
     model_id: str = Field(default="qwen3.8:27b-mlx", min_length=1)
     api_key: SecretStr
     host: str = "127.0.0.1"

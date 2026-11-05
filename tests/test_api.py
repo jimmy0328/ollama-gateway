@@ -17,6 +17,7 @@ COMPLETION = {"object": "chat.completion", "choices": [
 
 
 def settings(**kwargs):
+    kwargs.setdefault("ollama_base_url", "http://192.168.0.105:11434")
     return Settings(_env_file=None, api_key=KEY, **kwargs)
 
 
