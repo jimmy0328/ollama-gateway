@@ -79,6 +79,21 @@ curl -N http://127.0.0.1:8000/v1/chat/completions \
   -d '{"model":"qwen3.8:27b-mlx","messages":[{"role":"user","content":"你好"}],"max_tokens":128,"reasoning_effort":"none","stream":true}'
 ```
 
+串流行為說明：
+
+- 預設(省略 `stream` 或 `"stream": false`)一次回傳完整 JSON;加上 `"stream": true` 才會走 SSE。
+- 回應為 `content-type: text/event-stream`,每個事件是一行 `data: {...}`,格式為 OpenAI 相容的
+  `chat.completion.chunk`,文字在 `choices[0].delta.content`,最後以 `data: [DONE]` 結束。
+- token 生成後立即轉送,不會等全部生成完才送出。
+- 需要在串流結尾取得 token 用量時,加上 `"stream_options": {"include_usage": true}`;
+  `stream_options` 只能與 `"stream": true` 一起使用,否則回傳 422。
+- 首個 token 的等待時間取決於模型是否已載入。Ollama 預設會在閒置約 5 分鐘後卸載模型,
+  之後的第一個請求需要重新載入(18 GB 的 `qwen3.8:27b-mlx` 實測約 20 秒才開始出字,
+  已載入時約 1 至 3 秒)。呼叫端的逾時設定請預留這段時間。
+- 本 API 會送出 `x-accel-buffering: no` 與 `cache-control: no-cache`,nginx 不會緩衝串流。
+  前方若使用其他反向代理或通道,請確認它不會緩衝 SSE,否則呼叫端會變成一次收到全部內容。
+- curl 測試時請加 `-N` 關閉輸出緩衝。
+
 Python 範例：`python examples/client.py`。未指定 session 時，聊天歷史由呼叫端在每次 `messages` 一併傳入。
 需要伺服器保存使用者訊息、模型輸出並在最後產生完整對話摘要，請看 [對話記憶與摘要](MEMORY.md)。
 
