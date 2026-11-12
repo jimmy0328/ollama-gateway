@@ -19,6 +19,24 @@ FastAPI 將外部請求轉送至 `http://192.168.0.105:11434` 的 Ollama 服務�
 API 文件：[http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)。
 按 Authorize 輸入 `.env` 中的 `API_KEY` 即可測試。Ctrl+C 停止本 API；遠端 Ollama 維持運作。
 
+## 用 Docker Compose 啟動
+
+需要 Docker 與 Compose v2，以及已填好 `API_KEY`、`OLLAMA_BASE_URL` 的 `.env`（做法同下方「重新安裝」）。
+
+```bash
+docker compose up -d --build   # 建置並在背景啟動
+docker compose logs -f         # 查看日誌
+docker compose down            # 停止並移除容器
+```
+
+- 設定沿用 `.env`。`HOST` / `PORT` 在 Compose 下代表主機上的綁定位置：
+  `HOST=127.0.0.1` 只允許本機呼叫，改成 `0.0.0.0` 才開放給其他電腦。容器內固定監聽 `0.0.0.0:8000`。
+- 對話記憶保存在主機的 `./data`，與 `./start.sh` 共用同一份 SQLite。
+  兩種啟動方式請擇一執行，不要同時開著寫同一個資料庫，也會搶同一個 port。
+- `OLLAMA_BASE_URL` 是從容器內連出去的位址。Ollama 若跑在同一台主機，
+  請填 `http://host.docker.internal:11434`，不要填 `127.0.0.1`。
+- 修改 `.env` 後執行 `docker compose up -d` 套用；修改程式碼後加上 `--build`。
+
 ## 重新安裝
 
 需求為 Python 3.11 以上，且能連線至指定的 Ollama 服務。
