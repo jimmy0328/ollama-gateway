@@ -1,0 +1,24 @@
+services:
+  api:
+    build: .
+    image: ollama-rest-api:latest
+    restart: unless-stopped
+    # 設定沿用 .env；API_KEY 與 OLLAMA_BASE_URL 必填。
+    env_file: .env
+    environment:
+      # 容器內固定綁定 0.0.0.0:8000；對外位置由下方 ports 決定。
+      HOST: 0.0.0.0
+      PORT: "8000"
+      MEMORY_DB_PATH: /app/data/conversations.sqlite3
+    ports:
+      # .env 的 HOST / PORT 在這裡代表「主機上」的綁定位置。
+      # HOST=127.0.0.1 只允許本機呼叫；改成 0.0.0.0 開放給其他電腦。
+      - "${HOST:-127.0.0.1}:${PORT:-8000}:8000"
+    extra_hosts:
+      # 讓 Linux 主機也能用 host.docker.internal 連到主機上的 Ollama。
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # 對話記憶保存在主機的 ./data，與 ./start.sh 啟動時共用同一份資料。
+      - ./data:/app/data
+    # 一次生成中的請求最多等 15 秒收尾（對應 uvicorn 的 graceful shutdown）。
+    stop_grace_period: 20s
